@@ -2,8 +2,8 @@ from urllib.parse import quote_plus
 from datetime import datetime
 import praw
 
-IGNORE = ["subreddit", "redditors", "b"]
-SEARCH = ["good", "yes", "reddit"]
+IGNORE = ["a", "u"]
+SEARCH = ["the ", "me "]
 CHANNELS = "all"
 REPLY_TEMPLATE = "[I found something for you!]({})"
 
@@ -24,25 +24,27 @@ def process_submission(submission):
     # check to see if it is WTB or META, ignore these
     normalized_title = submission.title.lower()
     normalized_desc = submission.selftext.lower()
+    # This is the start of the original search, not working well. missing a lot
+    for ignore_phrase in IGNORE:
+        if ignore_phrase in normalized_title:
+            return True
+
+        # only remaining SHOULD be for SALE or TRADE
 
     # Start of the new search feature, fingers crossed.
     # for any_line in normalized_desc:
     for search in SEARCH:
         if search in normalized_title:
-        # if any(word in any_line for word in SEARCH):
+
+            # if any(word in any_line for word in SEARCH):
             present_info(submission)
 
-    # This is the start of the original search, not working well. missing a lot
-    for ignore_phrase in IGNORE:
-        if ignore_phrase in normalized_title:
-            # return changed to break
-            break
-        # only remaining SHOULD be for SALE or TRADE
 
-    '''for search_phrase in SEARCH:
+
+    for search_phrase in SEARCH:
         if search_phrase in normalized_desc:
             present_info(submission)
-            # break'''
+            # break
 
 
 ##    #original
@@ -74,3 +76,4 @@ if __name__ == "__main__":
 ##4. check description to be sure
 ##5. same as 3
 ##6. ignore
+
